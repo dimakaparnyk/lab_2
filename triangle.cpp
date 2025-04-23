@@ -26,7 +26,7 @@ double Triangle::area() const {
     return heronArea(*this);
 }
 
-// Метод для перевірки, чи є трикутник виродженим (якщо його площа дорівнює нулю)
+// Метод для перевірки, чи є трикутник виродженим
 bool Triangle::isDegenerate() const {
     // Використовуємо векторний добуток для перевірки, чи площа трикутника дорівнює нулю
     double crossProduct = cross({ B.x - A.x, B.y - A.y }, { C.x - A.x, C.y - A.y });
@@ -41,21 +41,29 @@ bool Triangle::contains(const Point& p) const {
 
 // Альтернативний метод перевірки приналежності точки трикутнику через векторний добуток
 bool Triangle::containsAlt(const Point& p) const {
-    // Створюємо вектори для сторін трикутника та точок
+    // Вектори для сторін трикутника та точок
     Point ab = { B.x - A.x, B.y - A.y }, bc = { C.x - B.x, C.y - B.y },
         ca = { A.x - C.x, A.y - C.y }, ap = { p.x - A.x, p.y - A.y },
         bp = { p.x - B.x, p.y - B.y }, cp = { p.x - C.x, p.y - C.y };
 
-    // Обчислюємо векторні добутки
+    // Обчислення векторних добутків
     double cross1 = cross(ab, ap), cross2 = cross(bc, bp), cross3 = cross(ca, cp);
-
-    // Якщо всі векторні добутки мають однаковий знак, точка всередині трикутника
-    if ((cross1 > 0 && cross2 > 0 && cross3 > 0) || (cross1 < 0 && cross2 < 0 && cross3 < 0)) return true;
 
     // Якщо один з добутків дорівнює нулю, точка на межі трикутника
     if (cross1 == 0 || cross2 == 0 || cross3 == 0) {
-        cout << "A point on the edge of a triangle." << endl;
-        return true;
+        cout << "Point is on the edge of the triangle." << endl;
+        return true;  // Точка на межі
     }
-    return false;
+
+    // Якщо всі векторні добутки мають однаковий знак (точка всередині трикутника)
+    if ((cross1 > 0 && cross2 > 0 && cross3 > 0) || (cross1 < 0 && cross2 < 0 && cross3 < 0)) {
+        cout << "Point is inside the triangle." << endl;
+        return true;  // Точка всередині трикутника
+    }
+
+    // Якщо точка зовні трикутника
+    cout << "Point is outside the triangle." << endl;
+    return false;  // Точка зовні трикутника
 }
+
+

@@ -9,7 +9,7 @@ int main() {
         char lbl = 'A';
         double x, y;
 
-        // Input coordinates for the triangle
+        // Введення координат для трикутника
         for (int i = 0; i < 3; i++) {
             cout << "Enter x, y for point " << lbl << ": ";
             cin >> x >> y;
@@ -20,30 +20,54 @@ int main() {
             lbl = (lbl == 'A') ? 'B' : (lbl == 'B') ? 'C' : 'A';
         }
 
-        Point p;
-        cout << "Enter x, y for the point: ";
-        cin >> x >> y;
-        p = { x, y };
+        // Дозволяє вибрати метод для перевірки виродженості трикутника
+        char methodChoice;
+        cout << "Choose method for checking degenerate triangle (H for Heron, V for Vector Cross Product): ";
+        cin >> methodChoice;
 
-        // Check if the triangle is degenerate
-        if (t.isDegenerate()) {
+        // Перевірка на виродженість трикутника
+        bool isDegenerate = false;
+        if (methodChoice == 'H' || methodChoice == 'h') {
+            // Перевірка виродженості за допомогою формули Герона
+            if (t.area() == 0) {
+                isDegenerate = true;
+            }
+        }
+        else if (methodChoice == 'V' || methodChoice == 'v') {
+            // Перевірка виродженості за допомогою векторного добутку
+            if (t.isDegenerate()) {
+                isDegenerate = true;
+            }
+        }
+
+        if (isDegenerate) {
             cout << "The triangle is degenerate!" << endl;
         }
         else {
             cout << "The triangle is not degenerate." << endl;
         }
 
-        // Check if the point is inside the triangle or on its boundary
-        if (t.containsAlt(p)) {
-            cout << "Point is inside or on the edge of the triangle!" << endl;
-        }
-        else {
-            cout << "Point is outside the triangle!" << endl;
+        // Перевірка, скільки точок потрібно перевірити
+        int numPoints;
+        cout << "How many points do you want to check? ";
+        cin >> numPoints;
+
+        // Цикл для перевірки кожної точки
+        for (int i = 0; i < numPoints; i++) {
+            Point p;
+            cout << "Enter x, y for point " << i + 1 << ": ";
+            cin >> x >> y;
+            p = { x, y };
+
+            // Перевірка, чи точка знаходиться всередині, на межі або зовні трикутника
+            t.containsAlt(p); 
         }
 
-        // Option to continue or exit
+
+
+        // Запит для продовження або виходу
         char choice;
-        cout << "Countinue? (y/n): ";
+        cout << "Continue? (y/n): ";
         cin >> choice;
         if (choice != 'y') break;
     }
